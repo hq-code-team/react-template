@@ -1,6 +1,6 @@
 {
-  "name": "hq.import.web",
-  "version": "0.1.0",
+  "name": "hq.react-template",
+  "version": "1.10.1",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
@@ -12,6 +12,7 @@
     "@types/react-dom": "^18.2.7",
     "antd": "^5.8.3",
     "axios": "^1.4.0",
+    "jotai": "^2.4.0",
     "qs": "^6.11.2",
     "react": "^18.2.0",
     "react-cookie": "^4.1.1",

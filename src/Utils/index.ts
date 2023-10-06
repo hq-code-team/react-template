@@ -3,4 +3,3 @@
 // 计算类
 // 日期类
 export * from './StringUtils'
-export * from './AjaxUtil'

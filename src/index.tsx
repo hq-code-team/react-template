@@ -1,16 +1,20 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
-import { App } from "antd";
+import { App, ConfigProvider } from "antd";
 import { Router, BrowserRouter } from "./Routes";
-import { NavLink } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
-  <React.StrictMode>
-    <App>
+  <ConfigProvider
+    theme={{
+      token: {
+        borderRadius: 2,
+      },
+    }}
+  >
+    <App message={{ duration: 1.8, maxCount: 1 }} style={{ height: "100%", width: "100%" }}>
       <BrowserRouter>
         <Router />
       </BrowserRouter>
     </App>
-  </React.StrictMode>
+  </ConfigProvider>
 );

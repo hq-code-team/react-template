@@ -1,4 +1,5 @@
 import qs from "qs";
+import { ResultModel } from "../Types";
 import axios from "axios";
 import { message } from "antd";
 import { Cookies } from "react-cookie";
@@ -11,7 +12,7 @@ let TOKEN: string;
 /**axios默认配置 */
 const instance = axios.create({
   withCredentials: true,
-  baseURL: Config.baseUrl,
+  baseURL: baseUrl+"api/",
   timeout: 999999000,
   headers: {
     "Content-Type": "application/x-www-form-urlencoded",
@@ -20,11 +21,12 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (res) => {
-    if (!TOKEN) {
-      TOKEN= cookie.get<string>(Config.loginCookieName);
+    if (LoginEnable) {
+      if (!TOKEN) {
+        TOKEN = cookie.get<string>(Config.loginCookieName);
+      }
+      res.headers["Authorization"] = TOKEN;
     }
-    
-    res.headers["Authorization"] = TOKEN;
 
     return res;
   },
@@ -55,22 +57,21 @@ instance.interceptors.response.use(
   }
 );
 
-const AjaxUtil = {
+export const AjaxUtil = {
   /**
    * 发起get请求
    * @param {string} url 地址
    * @param {object} data 携带数据
    * @returns 请求数据
    */
-  get: async function (url: string, data: object, func: Function) {
-    instance({
+  get: async function (url: string, data: object): Promise<ResultModel<any>> {
+    const result: ResultModel<any> = await instance({
       method: "get",
       url: url,
       withCredentials: true,
       params: data,
-    }).then((res) => {
-      if (func && typeof func === "function") func(res);
     });
+    return result;
   },
 
   /**
@@ -78,8 +79,8 @@ const AjaxUtil = {
    * @param {string} url 请求路径
    * @param {object} data 请求数据
    */
-  post: async function (url: string, data: object): Promise<any> {
-    const result = await instance({
+  post: async function (url: string, data: object): Promise<ResultModel<any>> {
+    const result: ResultModel<any> = await instance({
       method: "post",
       url: url,
       withCredentials: true,
