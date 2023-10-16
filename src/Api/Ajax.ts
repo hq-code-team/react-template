@@ -1,18 +1,18 @@
 import qs from "qs";
-import { ResultModel } from "../Types";
 import axios from "axios";
 import { message } from "antd";
-import { Cookies } from "react-cookie";
-import { Config } from "../Setting";
 
-const cookie = new Cookies();
+import { cookie } from "../Utils";
+import { Config } from "../Setting";
+import { ResultModel } from "../Types";
+
 
 let TOKEN: string;
 
 /**axios默认配置 */
 const instance = axios.create({
   withCredentials: true,
-  baseURL: baseUrl+"api/",
+  baseURL: Config.baseUrl+"api/",
   timeout: 999999000,
   headers: {
     "Content-Type": "application/x-www-form-urlencoded",
@@ -21,7 +21,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (res) => {
-    if (LoginEnable) {
+    if (Config.LoginEnable) {
       if (!TOKEN) {
         TOKEN = cookie.get<string>(Config.loginCookieName);
       }

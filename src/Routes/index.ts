@@ -4,6 +4,7 @@ export interface RouteProps {
   Path: string;
   Component: any;
   Title: string;
+  Index?: boolean;
   Icon?: any;
   IsLogin: boolean;
   Children?: RouteProps[];

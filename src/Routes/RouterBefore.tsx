@@ -1,10 +1,12 @@
+import React, { Suspense } from "react";
 import { Navigate, useLocation, useRoutes } from "react-router-dom";
-import { routes } from "./Routes";
-import { Cookies } from "react-cookie";
-import { RouteProps } from ".";
 import type { RouteObject } from "react-router-dom";
+import { Spin } from "antd";
 
-const cookie = new Cookies();
+import { RouteProps } from ".";
+import { routes } from "./Routes";
+import { cookie } from "../Utils";
+import { Config } from "../Setting";
 
 /**
  * @description 渲染路由
@@ -18,7 +20,23 @@ const renderRoutes = (routes: RouteProps[]): RouteObject[] => {
     if (item.Component) {
       route.element = route.element = (
         <RouterBeforeEach route={item}>
-          <item.Component />
+          <Suspense
+            fallback={
+              <div
+                style={{
+                  height: "calc(100% - 2rem)",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  alignContent: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Spin />
+              </div>
+            }
+          >
+            <item.Component />
+          </Suspense>
         </RouterBeforeEach>
       );
     }
@@ -36,23 +54,25 @@ const renderRoutes = (routes: RouteProps[]): RouteObject[] => {
  */
 const RouterBeforeEach = (props: { route: RouteProps; children: any }) => {
   const location = useLocation();
-  console.log(location);
-  
+
   if (props?.route?.Title) {
-    document.title = props?.route?.Title;
+    document.title = "鸿雀" + (props?.route?.Title ? " - " + props?.route?.Title : "");
   }
-  const isLogin: boolean = !!cookie.get<string>("");
-  if (props?.route?.IsLogin) {
-    if (!isLogin) {
-      return <Navigate to={"/login"} replace />;
+  const isLogin: boolean = !!cookie.get<string>(Config.loginCookieName);
+
+  if (Config.LoginEnable) {
+    if (props?.route?.IsLogin) {
+      if (!isLogin) {
+        return <Navigate to={Config.LoginUrl} replace />;
+      }
     }
   }
 
   const routerKey = location.pathname;
-  if (isLogin && ["/login"].includes(routerKey)) {
+  if (isLogin && [Config.LoginUrl].includes(routerKey)) {
     return <Navigate to={"/"} replace />;
   }
-  return <div>{props.children}</div>;
+  return <>{props.children}</>;
 };
 
 /**

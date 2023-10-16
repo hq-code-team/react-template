@@ -1,9 +1,12 @@
 import ReactDOM from "react-dom/client";
 import { App, ConfigProvider } from "antd";
 import { Router, BrowserRouter } from "./Routes";
+// import "mac-scrollbar/dist/mac-scrollbar.css";
+// import { GlobalScrollbar } from "mac-scrollbar";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
+  // <GlobalScrollbar />
   <ConfigProvider
     theme={{
       token: {
@@ -18,3 +21,5 @@ root.render(
     </App>
   </ConfigProvider>
 );
+
+//此处建议添加mac-scrollbar组件

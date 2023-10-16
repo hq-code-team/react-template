@@ -18,10 +18,20 @@ export const Config: ConfigProps = {
    * cookie名称 [登录用]
    */
   loginCookieName: "login",
+  LoginUrl: "/login",
+  LoginEnable: false,
 };
 //项目配置
 
 interface ConfigProps {
   readonly baseUrl: string;
   readonly loginCookieName: string;
+   /**
+   * 登录地址
+   */
+   readonly LoginUrl: string;
+   /**
+    * 是否启用登录
+    */
+   readonly LoginEnable: boolean;
 }
